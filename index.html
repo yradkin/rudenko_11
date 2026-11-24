@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Опрос собственников · Руденко, 11</title>
-<meta name="description" content="Опрос собственников дома по ул. Сергея Руденко, 11 в Гомеле: способ управления домом и создание инициативной группы.">
+<title>Опросник · Руденко, 11</title>
+<meta name="description" content="Опросник (не бюллетень) для собственников дома по ул. Сергея Руденко, 11 в Гомеле: способ управления домом и инициативная группа.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&display=swap" rel="stylesheet">
@@ -12,129 +12,152 @@
 :root{
   --paper:#F2F4F1; --surface:#FFFFFF; --ink:#1B2430; --muted:#566170; --line:#D8DDE2;
   --accent:#1F6F5C; --accent-ink:#FFFFFF; --accent-soft:#E3F0EC; --lit:#F2B43C; --dark-win:#C9D0D6;
-  --err:#B42318; --err-soft:#FDECEA; --facade:#E6E9EC;
-  --r:14px; --gut:16px;
+  --err:#B42318; --err-soft:#FDECEA; --facade:#E6E9EC; --skel:#E4E8EC;
+  --r:16px; --r-sm:12px; --gut:16px;
+  --ease-out:cubic-bezier(.16,1,.3,1);
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --paper:#121619; --surface:#1A2025; --ink:#E8ECEF; --muted:#A3ADB7; --line:#2E363E;
   --accent:#5FBFA5; --accent-ink:#0E1A16; --accent-soft:#1B2E29; --lit:#F2B43C; --dark-win:#2C343B;
-  --err:#FF8A7A; --err-soft:#3A1E1B; --facade:#20272D;
+  --err:#FF8A7A; --err-soft:#3A1E1B; --facade:#20272D; --skel:#242C33;
 }}
 :root[data-theme="dark"]{
   --paper:#121619; --surface:#1A2025; --ink:#E8ECEF; --muted:#A3ADB7; --line:#2E363E;
   --accent:#5FBFA5; --accent-ink:#0E1A16; --accent-soft:#1B2E29; --lit:#F2B43C; --dark-win:#2C343B;
-  --err:#FF8A7A; --err-soft:#3A1E1B; --facade:#20272D;
+  --err:#FF8A7A; --err-soft:#3A1E1B; --facade:#20272D; --skel:#242C33;
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--paper);color:var(--ink);font:400 1rem/1.55 "Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif}
-.wrap{max-width:720px;margin:0 auto;padding:0 var(--gut)}
+.wrap{max-width:640px;margin:0 auto;padding:0 var(--gut)}
 a{color:var(--accent)}
-:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:4px}
+p{margin:0}
 
 /* шапка */
-header{padding:40px 0 8px}
-.addr{font-size:clamp(2.5rem,11vw,4.75rem);font-weight:600;line-height:1.02;letter-spacing:-0.03em;margin:0}
-.addr small{display:block;font-size:1rem;letter-spacing:0;font-weight:500;color:var(--muted);margin-bottom:10px}
-.lead{font-size:1.25rem;line-height:1.35;margin:18px 0 0;max-width:30ch;font-weight:500}
-.note{margin:20px 0 0;padding:14px 16px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);color:var(--muted);font-size:.9375rem}
-.note b{color:var(--ink);font-weight:600}
-.jump{display:inline-block;margin-top:14px;font-weight:500}
+header{padding:48px 0 0}
+.city{font-weight:500;color:var(--muted);margin:0 0 8px}
+.addr{font-size:clamp(2rem,8vw,3.25rem);font-weight:600;line-height:1.1;letter-spacing:-0.02em;margin:0;max-width:14ch}
+.lead{font-size:1.25rem;line-height:1.25;margin:16px 0 0;max-width:28ch;font-weight:500}
+.notice{margin:24px 0 0;padding:24px;border:1px solid var(--accent);border-radius:var(--r);background:var(--accent-soft)}
+.notice h2{margin:0 0 8px;font-size:1.25rem;line-height:1.25;font-weight:600}
+.notice p{max-width:65ch}
+.notice ul{margin:16px 0 0;padding:0 0 0 20px;color:var(--muted);font-size:.875rem;max-width:65ch}
+.notice li+li{margin-top:4px}
+.jump{display:inline-flex;align-items:center;min-height:44px;margin-top:8px;font-weight:500}
 
 /* форма */
-form{margin:28px 0 0}
-fieldset{border:1px solid var(--line);background:var(--surface);border-radius:var(--r);padding:20px 18px 22px;margin:0 0 14px;min-width:0}
-legend{float:left;width:100%;padding:0;margin:0 0 14px;font-size:1.25rem;line-height:1.25;font-weight:600}
+form{margin:24px 0 0}
+fieldset{border:1px solid var(--line);background:var(--surface);border-radius:var(--r);padding:24px 16px;margin:0 0 16px;min-width:0}
+legend{float:left;width:100%;padding:0;margin:0 0 16px;font-size:1.25rem;line-height:1.25;font-weight:600}
 legend + *{clear:left}
 .num{display:inline-block;min-width:1.6em;color:var(--accent)}
-.hint{color:var(--muted);font-size:.875rem;margin:-6px 0 12px}
+.hint{color:var(--muted);font-size:.875rem;margin:-8px 0 12px;max-width:65ch}
+.fhint{margin:8px 0 0}
 .field{margin:0 0 16px}
 .field:last-child{margin-bottom:0}
-label.lbl{display:block;font-weight:500;margin:0 0 6px}
+label.lbl{display:block;font-weight:500;margin:0 0 8px}
 .opt{font-weight:400;color:var(--muted)}
-input[type=text],input[type=tel],input[type=number]{width:100%;font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px;min-height:48px}
-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+input[type=text],input[type=tel]{width:100%;font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:var(--r-sm);padding:12px 16px;min-height:48px}
+input[type=text]:focus,input[type=tel]:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.row2{margin-bottom:16px}
+.row2 .field{margin-bottom:0}
 .bad input{border-color:var(--err)}
-.msg{display:none;color:var(--err);font-size:.875rem;margin-top:6px}
-.bad .msg{display:block}
+.msg{display:none;color:var(--err);font-size:.875rem;margin-top:8px}
+.bad > .msg,.bad .field > .msg{display:block}
+fieldset.bad .msg{display:block}
 
-.choices{display:grid;gap:10px}
-.choice{position:relative;display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;background:var(--paper);transition:border-color 150ms cubic-bezier(.16,1,.3,1),background-color 150ms cubic-bezier(.16,1,.3,1)}
+.choices{display:grid;gap:8px}
+.choice{position:relative;display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:var(--r-sm);padding:12px 16px;min-height:48px;cursor:pointer;background:var(--paper)}
 .choice:hover{border-color:var(--muted)}
-.choice input{margin:3px 0 0;width:20px;height:20px;accent-color:var(--accent);flex:none}
+.choice input{margin:2px 0 0;width:20px;height:20px;accent-color:var(--accent);flex:none}
 .choice b{display:block;font-weight:600}
-.choice span{display:block;color:var(--muted);font-size:.875rem;margin-top:2px}
+.choice span{display:block;color:var(--muted);font-size:.875rem;margin-top:4px}
 .choice:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
 .choice:has(input:focus-visible){outline:3px solid var(--accent);outline-offset:2px}
-.calc{margin-top:10px;font-size:.875rem;color:var(--muted)}
-.calc b{color:var(--ink);font-weight:600}
+.choice span b{display:inline;color:var(--ink)}
 .roles{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.roles .choice{padding:12px}
-.consent{display:flex;gap:12px;align-items:flex-start;font-size:.9375rem;cursor:pointer}
-.consent input{width:22px;height:22px;margin:1px 0 0;accent-color:var(--accent);flex:none}
+.consent{display:flex;gap:12px;align-items:flex-start;cursor:pointer}
+.consent input{width:24px;height:24px;margin:0;accent-color:var(--accent);flex:none}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 
-.send{display:flex;flex-direction:column;gap:10px;margin:6px 0 0}
+.send{display:flex;flex-direction:column;gap:12px;margin:8px 0 0}
+.send .small{color:var(--muted);font-size:.875rem}
 button{font:inherit}
-.btn{appearance:none;border:0;border-radius:12px;min-height:54px;padding:0 22px;background:var(--accent);color:var(--accent-ink);font-weight:600;font-size:1.0625rem;cursor:pointer;transition:opacity 150ms ease-out}
+.btn{appearance:none;border:0;border-radius:var(--r-sm);min-height:56px;padding:0 24px;background:var(--accent);color:var(--accent-ink);font-weight:600;font-size:1rem;cursor:pointer;transition:opacity 150ms var(--ease-out)}
 .btn:hover{opacity:.92}
-.btn[disabled]{opacity:.6;cursor:progress}
-.formerr{display:none;padding:12px 14px;border-radius:12px;background:var(--err-soft);color:var(--err);font-size:.9375rem}
+.btn[aria-busy="true"]{opacity:.7;cursor:progress}
+.formerr{display:none;padding:12px 16px;border-radius:var(--r-sm);background:var(--err-soft);color:var(--err);font-size:.875rem}
 .formerr.on{display:block}
-.done{display:none;border:1px solid var(--accent);background:var(--accent-soft);border-radius:var(--r);padding:20px 18px;margin:28px 0 0}
+.done{display:none;border:1px solid var(--accent);background:var(--accent-soft);border-radius:var(--r);padding:24px 16px;margin:24px 0 0}
 .done.on{display:block}
-.done h2{margin:0 0 6px;font-size:1.25rem;line-height:1.25;font-weight:600}
-.done p{margin:0 0 12px}
-.link{appearance:none;background:none;border:0;padding:0;color:var(--accent);font-weight:500;text-decoration:underline;cursor:pointer}
+.done h2{margin:0 0 8px;font-size:1.25rem;line-height:1.25;font-weight:600}
+.done p{margin:0 0 8px}
+.link{appearance:none;background:none;border:0;padding:0;min-height:44px;color:var(--accent);font-weight:500;text-decoration:underline;cursor:pointer}
 
 /* результаты */
-#results{margin:44px 0 0;padding:0 0 56px}
-#results h2{font-size:clamp(1.75rem,6vw,2.25rem);line-height:1.15;letter-spacing:-0.015em;margin:0 0 6px;font-weight:600}
-.upd{color:var(--muted);font-size:.875rem;margin:0 0 18px}
-.facade{background:var(--facade);border:1px solid var(--line);border-radius:var(--r);padding:18px 16px 0;overflow:hidden}
-.wins{display:grid;grid-template-columns:repeat(auto-fill,minmax(22px,1fr));gap:8px;min-height:30px}
-.win{aspect-ratio:3/4;border-radius:3px;background:var(--dark-win);transform:scale(1);transition:background-color 300ms cubic-bezier(.16,1,.3,1)}
-.win.lit{background:var(--lit);box-shadow:0 0 0 1px rgba(0,0,0,.04)}
-.ground{height:12px;margin:18px -16px 0;background:var(--line)}
-.wcap{font-size:.875rem;color:var(--muted);margin:10px 0 0}
-.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0 0}
-.kpi{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px}
-.kpi b{display:block;font-size:1.75rem;line-height:1.1;font-weight:600;font-variant-numeric:tabular-nums}
-.kpi span{display:block;color:var(--muted);font-size:.875rem;margin-top:4px;line-height:1.3}
-.seg{display:inline-flex;margin:22px 0 4px;border:1px solid var(--line);border-radius:10px;padding:3px;background:var(--surface)}
-.seg button{border:0;background:none;color:var(--muted);font-weight:500;padding:8px 14px;border-radius:8px;min-height:40px;cursor:pointer}
+#results{margin:48px 0 0;padding:0 0 56px;scroll-margin-top:16px}
+#results h2{font-size:clamp(1.75rem,6vw,2.25rem);line-height:1.15;letter-spacing:-0.015em;margin:0 0 8px;font-weight:600}
+.upd{color:var(--muted);font-size:.875rem;margin:0 0 16px}
+.facade{background:var(--facade);border:1px solid var(--line);border-radius:var(--r);padding:16px 16px 0;overflow:hidden}
+.wins{display:grid;grid-template-columns:repeat(auto-fill,minmax(20px,1fr));gap:8px;min-height:28px}
+.win{position:relative;aspect-ratio:3/4;border-radius:4px;background:var(--dark-win);overflow:hidden}
+.win::after{content:"";position:absolute;inset:0;background:var(--lit);opacity:0;transition:opacity 300ms var(--ease-out)}
+.win.lit::after{opacity:1}
+.ground{height:12px;margin:16px -16px 0;background:var(--line)}
+.wcap{font-size:.875rem;color:var(--muted);margin:8px 0 0}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0 0}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:16px}
+.kpi b{display:block;font-size:1.75rem;line-height:1.15;font-weight:600;font-variant-numeric:tabular-nums}
+.kpi span{display:block;color:var(--muted);font-size:.875rem;margin-top:4px;line-height:1.4}
+.seg{display:inline-flex;margin:24px 0 0;border:1px solid var(--line);border-radius:var(--r-sm);padding:4px;background:var(--surface)}
+.seg button{border:0;background:none;color:var(--muted);font-weight:500;padding:0 16px;border-radius:8px;min-height:44px;cursor:pointer}
 .seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
-.q{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin:12px 0 0}
-.q h3{margin:0 0 4px;font-size:1rem;font-weight:600;line-height:1.3}
+.q{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin:8px 0 0}
+#qs{margin-top:8px}
+.q h3{margin:0 0 4px;font-size:1rem;font-weight:600;line-height:1.25}
 .q .cnt{color:var(--muted);font-size:.875rem;margin:0 0 12px}
 .bar{margin:0 0 12px}
 .bar:last-child{margin:0}
-.bar .top{display:flex;justify-content:space-between;gap:10px;font-size:.9375rem;margin-bottom:6px}
-.bar .top b{font-weight:600;font-variant-numeric:tabular-nums}
-.track{height:12px;background:var(--paper);border-radius:6px;overflow:hidden;border:1px solid var(--line)}
-.fill{height:100%;background:var(--accent);transform-origin:left;transform:scaleX(0);transition:transform 300ms cubic-bezier(.16,1,.3,1)}
+.bar .top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:8px}
+.bar .top b{font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.bar .top small{font-size:.875rem;color:var(--muted);font-weight:400}
+.track{height:12px;background:var(--paper);border-radius:8px;overflow:hidden;border:1px solid var(--line)}
+.fill{height:100%;background:var(--muted);transform-origin:left;transform:scaleX(0);transition:transform 300ms var(--ease-out)}
 .lead1 .fill{background:var(--accent)}
-.bar:not(.lead1) .fill{background:var(--muted)}
-.rl{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.9375rem}
+.rl{display:flex;flex-wrap:wrap;gap:8px 16px}
 .rl span b{font-weight:600}
 .empty{color:var(--muted)}
-footer{border-top:1px solid var(--line);padding:18px 0 40px;color:var(--muted);font-size:.875rem}
+.skel{display:block;height:12px;border-radius:8px;background:var(--skel)}
+.skel.t{width:40%;height:16px;margin-bottom:12px}
+.skel+.skel{margin-top:12px}
+footer{border-top:1px solid var(--line);padding:16px 0 40px;color:var(--muted);font-size:.875rem}
 @media (max-width:520px){
   .row2,.roles{grid-template-columns:1fr}
   .kpis{grid-template-columns:1fr 1fr}
   .kpi:last-child{grid-column:1/-1}
+  .notice{padding:16px}
 }
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (prefers-reduced-motion:reduce){*,*::after{transition:none!important}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
-    <h1 class="addr"><small>Гомель, ул. Сергея</small>Руденко, 11</h1>
-    <p class="lead">Опрос собственников: как будем управлять нашим домом</p>
-    <p class="note"><b>Это не бюллетень</b>, а опрос для сбора информации и создания инициативной группы. Заполняет собственник, один ответ на квартиру. ФИО и телефон видит только инициативная группа, на странице показываются только общие цифры.</p>
-    <a class="jump" href="#results">Посмотреть результаты</a>
+    <p class="city">Гомель</p>
+    <h1 class="addr">ул. Сергея Руденко, 11</h1>
+    <p class="lead">Опросник для собственников: как будем управлять нашим домом</p>
+    <section class="notice" aria-labelledby="nb">
+      <h2 id="nb">Это опросник, а не бюллетень</h2>
+      <p>Ответ не является голосованием и ни к чему не обязывает. Инициативная группа собирает мнения соседей: нужно ли дому товарищество собственников и кто готов помочь.</p>
+      <ul>
+        <li>Один ответ на квартиру, заполняет собственник.</li>
+        <li>ФИО и телефон видит только инициативная группа. На сайте — только общие цифры.</li>
+        <li>Ответ можно исправить, засчитается последний.</li>
+      </ul>
+    </section>
+    <a class="jump" href="#results">Посмотреть результаты опроса</a>
   </header>
 
   <form id="f" novalidate>
@@ -149,10 +172,11 @@ footer{border-top:1px solid var(--line);padding:18px 0 40px;color:var(--muted);f
         <div class="field" data-f="area">
           <label class="lbl" for="area">Площадь, м²</label>
           <input id="area" name="area" type="text" inputmode="decimal" autocomplete="off" maxlength="6" required aria-describedby="area-h">
+          <p class="hint fhint" id="area-h">Из синего свидетельства, без балконов и лоджий.</p>
           <div class="msg">Площадь от 10 до 300 м², например 67,19</div>
         </div>
       </div>
-      <p class="hint" id="area-h">Площадь из синего свидетельства, без балконов и лоджий.</p>
+      
       <div class="field" data-f="owner1">
         <label class="lbl" for="owner1">Собственник — ФИО полностью</label>
         <input id="owner1" name="owner1" type="text" autocomplete="name" maxlength="120" required>
@@ -231,6 +255,7 @@ footer{border-top:1px solid var(--line);padding:18px 0 40px;color:var(--muted);f
     <div class="hp" aria-hidden="true"><label>Сайт <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
 
     <div class="send">
+      <p class="small">Это не голосование: ответ уйдёт инициативной группе как мнение вашей квартиры.</p>
       <div class="formerr" id="ferr" role="alert"></div>
       <button class="btn" id="sendBtn" type="submit">Отправить ответ</button>
     </div>
@@ -244,7 +269,7 @@ footer{border-top:1px solid var(--line);padding:18px 0 40px;color:var(--muted);f
 
   <section id="results" aria-labelledby="rh">
     <h2 id="rh">Как отвечает дом</h2>
-    <p class="upd" id="upd">Загружаем результаты…</p>
+    <p class="upd" id="upd" aria-live="polite">Загружаем результаты…</p>
     <div class="facade" aria-hidden="true">
       <div class="wins" id="wins"></div>
       <div class="ground"></div>
@@ -259,7 +284,7 @@ footer{border-top:1px solid var(--line);padding:18px 0 40px;color:var(--muted);f
       <button type="button" data-mode="n" aria-pressed="true">По квартирам</button>
       <button type="button" data-mode="area" aria-pressed="false">По площади</button>
     </div>
-    <div id="qs"></div>
+    <div id="qs" aria-busy="true"><div class="q"><span class="skel t"></span><span class="skel"></span><span class="skel"></span></div><div class="q"><span class="skel t"></span><span class="skel"></span><span class="skel"></span></div></div>
   </section>
 </div>
 <footer><div class="wrap">Опрос инициативной группы дома по ул. Сергея Руденко, 11. Результаты обновляются автоматически.</div></footer>
@@ -280,7 +305,9 @@ const $ = s => document.querySelector(s);
 const f = $('#f');
 const num = (n, d = 0) => Number(n).toLocaleString('ru-RU', { minimumFractionDigits: d, maximumFractionDigits: d });
 const plural = (n, a, b, c) => { const m = n % 100, l = n % 10; return m > 10 && m < 20 ? c : l === 1 ? a : l > 1 && l < 5 ? b : c; };
-const store = { get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
+const store = { get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }, del(k) { try { localStorage.removeItem(k); } catch (e) {} } };
+const RM = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+const DRAFT = 'opros-r11-draft';
 
 /* ---------- проверка полей: при уходе с поля, ошибка снимается сразу при исправлении ---------- */
 const areaVal = () => parseFloat(String(f.area.value).replace(',', '.'));
@@ -297,7 +324,7 @@ const box = k => document.querySelector('[data-f="' + k + '"]');
 function mark(k) { const ok = checks[k](); box(k).classList.toggle('bad', !ok); return ok; }
 ['apt', 'area', 'owner1', 'phone'].forEach(k => {
   f[k].addEventListener('blur', () => { if (f[k].value) mark(k); });
-  f[k].addEventListener('input', () => { if (box(k).classList.contains('bad')) mark(k); });
+  f[k].addEventListener('input', () => box(k).classList.remove('bad'));   // ошибка уходит с первым исправлением
 });
 ['manage', 'group'].forEach(k => f.querySelectorAll('[name=' + k + ']').forEach(i => i.addEventListener('change', () => mark(k))));
 f.consent.addEventListener('change', () => mark('consent'));
@@ -332,29 +359,29 @@ f.addEventListener('submit', async e => {
   const bad = Object.keys(checks).filter(k => !mark(k));
   const err = $('#ferr');
   if (bad.length) {
-    err.textContent = 'Проверьте отмеченные поля: ' + bad.length + ' ' + plural(bad.length, 'поле заполнено', 'поля заполнены', 'полей заполнено') + ' не полностью.';
+    err.textContent = 'Ответ ещё не отправлен: ' + bad.length + ' ' + plural(bad.length, 'поле нужно', 'поля нужно', 'полей нужно') + ' дозаполнить. Они отмечены красным — исправьте их и нажмите «Отправить ответ».';
     err.classList.add('on');
-    const first = box(bad[0]); first.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
+    const first = box(bad[0]); first.scrollIntoView({ behavior: RM() ? 'auto' : 'smooth', block: 'center' });
     (first.querySelector('input') || first).focus({ preventScroll: true });
     return;
   }
   err.classList.remove('on');
   if (!CONFIG.API) { err.textContent = 'Сервер опроса ещё не подключён. Попробуйте позже.'; err.classList.add('on'); return; }
-  const btn = $('#sendBtn'); btn.disabled = true; btn.textContent = 'Отправляем…';
+  const btn = $('#sendBtn'); if (btn.getAttribute('aria-busy') === 'true') return; btn.setAttribute('aria-busy', 'true'); btn.textContent = 'Отправляем…';
   const d = data();
   try {
     const r = await fetch(CONFIG.API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(d) });
     const j = await r.json();
     if (!j.ok) throw new Error(j.error || 'Не получилось сохранить ответ.');
     const keep = Object.assign({}, d); delete keep.website; delete keep.consent;
-    store.set('opros-r11', keep);
+    store.set('opros-r11', keep); store.del(DRAFT);
     f.hidden = true; $('#done').classList.add('on');
     if (j.stats) render(j.stats);
-    $('#done').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    $('#done').scrollIntoView({ behavior: RM() ? 'auto' : 'smooth', block: 'start' });
   } catch (x) {
     err.textContent = (x && x.message && !/fetch|network|JSON/i.test(x.message)) ? x.message : 'Не получилось отправить: нет связи с сервером. Проверьте интернет и нажмите «Отправить ответ» ещё раз.';
     err.classList.add('on');
-  } finally { btn.disabled = false; btn.textContent = 'Отправить ответ'; }
+  } finally { btn.removeAttribute('aria-busy'); btn.textContent = 'Отправить ответ'; }
 });
 $('#editBtn').addEventListener('click', () => {
   fill(store.get('opros-r11')); f.consent.checked = false;
@@ -377,23 +404,23 @@ function render(s) {
   $('#kArea').textContent = num(s.area);
   $('#kAreaL').textContent = 'м² площади' + (CONFIG.TOTAL_AREA ? ' · ' + num(s.area / CONFIG.TOTAL_AREA * 100) + '% дома' : '');
   const when = new Date(s.updated);
-  $('#upd').textContent = 'Обновлено в ' + when.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }) + '. Учитывается последний ответ каждой квартиры.';
+  $('#upd').textContent = 'Предварительные итоги опросника, не голосования. Обновлено в ' + when.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }) + ', учитывается последний ответ каждой квартиры.';
   // фасад: каждое окно — квартира; горит, если ответила
   const total = Math.max(t || 0, s.flats);
   const w = $('#wins');
   if (w.children.length !== total) { w.innerHTML = ''; for (let i = 0; i < total; i++) { const d = document.createElement('div'); d.className = 'win'; w.appendChild(d); } }
   [...w.children].forEach((d, i) => d.classList.toggle('lit', i < s.flats));
-  $('#wcap').textContent = s.flats ? 'Каждое светящееся окно — квартира, которая уже ответила.' + (t ? '' : '') : 'Пока никто не ответил — станьте первым.';
+  $('#wcap').innerHTML = s.flats ? 'Каждое светящееся окно — квартира, которая уже ответила.' : 'Пока никто не ответил. Ответы соседей появятся здесь, как только они заполнят опросник. <a href="#f">Заполнить опросник</a>';
   // вопросы
-  const qs = $('#qs'); qs.innerHTML = '';
+  const qs = $('#qs'); qs.innerHTML = ''; qs.setAttribute('aria-busy', 'false');
   QS.forEach(q => {
     const r = s.q[q.k]; if (!r) return;
     const base = MODE === 'n' ? r.answered : r.answeredArea;
     const vals = q.o.map(([key, lab]) => { const o = r.opts[key] || { n: 0, area: 0 }; const v = MODE === 'n' ? o.n : o.area; return { lab, v, n: o.n, p: base ? v / base * 100 : 0 }; });
     const max = Math.max(...vals.map(v => v.p));
     const el = document.createElement('div'); el.className = 'q';
-    el.innerHTML = '<h3>' + q.t + '</h3><p class="cnt">' + (r.answered ? 'Ответили ' + num(r.answered) + ' ' + plural(r.answered, 'квартира', 'квартиры', 'квартир') + (MODE === 'area' ? ', ' + num(r.answeredArea) + ' м²' : '') : 'Пока нет ответов') + '</p>' +
-      vals.map(v => '<div class="bar' + (v.p === max && v.p > 0 ? ' lead1' : '') + '"><div class="top"><span>' + v.lab + '</span><b>' + num(v.p) + '%<span class="opt" style="font-weight:400"> · ' + num(v.n) + ' кв.</span></b></div><div class="track" role="img" aria-label="' + v.lab + ': ' + num(v.p) + '%"><div class="fill" data-p="' + v.p + '"></div></div></div>').join('');
+    el.innerHTML = '<h3>' + q.t + '</h3><p class="cnt">' + (r.answered ? plural(r.answered, 'Ответила ', 'Ответили ', 'Ответили ') + num(r.answered) + ' ' + plural(r.answered, 'квартира', 'квартиры', 'квартир') + (MODE === 'area' ? ', ' + num(r.answeredArea) + ' м²' : '') : 'Пока нет ответов') + '</p>' +
+      vals.map(v => '<div class="bar' + (v.p === max && v.p > 0 ? ' lead1' : '') + '"><div class="top"><span>' + v.lab + '</span><b>' + num(v.p) + '% <small>· ' + num(v.n) + ' кв.</small></b></div><div class="track" role="img" aria-label="' + v.lab + ': ' + num(v.p) + '%"><div class="fill" data-p="' + v.p + '"></div></div></div>').join('');
     qs.appendChild(el);
   });
   const rl = Object.entries(s.roles || {}).filter(([, n]) => n > 0);
@@ -407,6 +434,11 @@ async function load() {
   try { const r = await fetch(CONFIG.API + '?t=' + Date.now()); render(await r.json()); }
   catch (e) { if (!LAST) $('#upd').textContent = 'Не удалось загрузить результаты. Обновите страницу.'; }
 }
+// черновик: всё, что начали заполнять, переживает перезагрузку страницы
+const saveDraft = () => { const d = data(); delete d.website; delete d.consent; store.set(DRAFT, d); };
+f.addEventListener('input', saveDraft);
+f.addEventListener('change', saveDraft);
+fill(store.get(DRAFT));
 load();
 setInterval(() => { if (!document.hidden) load(); }, 30000);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) load(); });
