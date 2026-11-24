@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Опрос собственников · Руденко, 11</title>
+<meta name="description" content="Опрос собственников дома по ул. Сергея Руденко, 11 в Гомеле: способ управления домом и создание инициативной группы.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F2F4F1; --surface:#FFFFFF; --ink:#1B2430; --muted:#566170; --line:#D8DDE2;
+  --accent:#1F6F5C; --accent-ink:#FFFFFF; --accent-soft:#E3F0EC; --lit:#F2B43C; --dark-win:#C9D0D6;
+  --err:#B42318; --err-soft:#FDECEA; --facade:#E6E9EC;
+  --r:14px; --gut:16px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#121619; --surface:#1A2025; --ink:#E8ECEF; --muted:#A3ADB7; --line:#2E363E;
+  --accent:#5FBFA5; --accent-ink:#0E1A16; --accent-soft:#1B2E29; --lit:#F2B43C; --dark-win:#2C343B;
+  --err:#FF8A7A; --err-soft:#3A1E1B; --facade:#20272D;
+}}
+:root[data-theme="dark"]{
+  --paper:#121619; --surface:#1A2025; --ink:#E8ECEF; --muted:#A3ADB7; --line:#2E363E;
+  --accent:#5FBFA5; --accent-ink:#0E1A16; --accent-soft:#1B2E29; --lit:#F2B43C; --dark-win:#2C343B;
+  --err:#FF8A7A; --err-soft:#3A1E1B; --facade:#20272D;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 1rem/1.55 "Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:720px;margin:0 auto;padding:0 var(--gut)}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+
+/* шапка */
+header{padding:40px 0 8px}
+.addr{font-size:clamp(2.5rem,11vw,4.75rem);font-weight:600;line-height:1.02;letter-spacing:-0.03em;margin:0}
+.addr small{display:block;font-size:1rem;letter-spacing:0;font-weight:500;color:var(--muted);margin-bottom:10px}
+.lead{font-size:1.25rem;line-height:1.35;margin:18px 0 0;max-width:30ch;font-weight:500}
+.note{margin:20px 0 0;padding:14px 16px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);color:var(--muted);font-size:.9375rem}
+.note b{color:var(--ink);font-weight:600}
+.jump{display:inline-block;margin-top:14px;font-weight:500}
+
+/* форма */
+form{margin:28px 0 0}
+fieldset{border:1px solid var(--line);background:var(--surface);border-radius:var(--r);padding:20px 18px 22px;margin:0 0 14px;min-width:0}
+legend{float:left;width:100%;padding:0;margin:0 0 14px;font-size:1.25rem;line-height:1.25;font-weight:600}
+legend + *{clear:left}
+.num{display:inline-block;min-width:1.6em;color:var(--accent)}
+.hint{color:var(--muted);font-size:.875rem;margin:-6px 0 12px}
+.field{margin:0 0 16px}
+.field:last-child{margin-bottom:0}
+label.lbl{display:block;font-weight:500;margin:0 0 6px}
+.opt{font-weight:400;color:var(--muted)}
+input[type=text],input[type=tel],input[type=number]{width:100%;font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px;min-height:48px}
+input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.bad input{border-color:var(--err)}
+.msg{display:none;color:var(--err);font-size:.875rem;margin-top:6px}
+.bad .msg{display:block}
+
+.choices{display:grid;gap:10px}
+.choice{position:relative;display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;background:var(--paper);transition:border-color 150ms cubic-bezier(.16,1,.3,1),background-color 150ms cubic-bezier(.16,1,.3,1)}
+.choice:hover{border-color:var(--muted)}
+.choice input{margin:3px 0 0;width:20px;height:20px;accent-color:var(--accent);flex:none}
+.choice b{display:block;font-weight:600}
+.choice span{display:block;color:var(--muted);font-size:.875rem;margin-top:2px}
+.choice:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.choice:has(input:focus-visible){outline:3px solid var(--accent);outline-offset:2px}
+.calc{margin-top:10px;font-size:.875rem;color:var(--muted)}
+.calc b{color:var(--ink);font-weight:600}
+.roles{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.roles .choice{padding:12px}
+.consent{display:flex;gap:12px;align-items:flex-start;font-size:.9375rem;cursor:pointer}
+.consent input{width:22px;height:22px;margin:1px 0 0;accent-color:var(--accent);flex:none}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+
+.send{display:flex;flex-direction:column;gap:10px;margin:6px 0 0}
+button{font:inherit}
+.btn{appearance:none;border:0;border-radius:12px;min-height:54px;padding:0 22px;background:var(--accent);color:var(--accent-ink);font-weight:600;font-size:1.0625rem;cursor:pointer;transition:opacity 150ms ease-out}
+.btn:hover{opacity:.92}
+.btn[disabled]{opacity:.6;cursor:progress}
+.formerr{display:none;padding:12px 14px;border-radius:12px;background:var(--err-soft);color:var(--err);font-size:.9375rem}
+.formerr.on{display:block}
+.done{display:none;border:1px solid var(--accent);background:var(--accent-soft);border-radius:var(--r);padding:20px 18px;margin:28px 0 0}
+.done.on{display:block}
+.done h2{margin:0 0 6px;font-size:1.25rem;line-height:1.25;font-weight:600}
+.done p{margin:0 0 12px}
+.link{appearance:none;background:none;border:0;padding:0;color:var(--accent);font-weight:500;text-decoration:underline;cursor:pointer}
+
+/* результаты */
+#results{margin:44px 0 0;padding:0 0 56px}
+#results h2{font-size:clamp(1.75rem,6vw,2.25rem);line-height:1.15;letter-spacing:-0.015em;margin:0 0 6px;font-weight:600}
+.upd{color:var(--muted);font-size:.875rem;margin:0 0 18px}
+.facade{background:var(--facade);border:1px solid var(--line);border-radius:var(--r);padding:18px 16px 0;overflow:hidden}
+.wins{display:grid;grid-template-columns:repeat(auto-fill,minmax(22px,1fr));gap:8px;min-height:30px}
+.win{aspect-ratio:3/4;border-radius:3px;background:var(--dark-win);transform:scale(1);transition:background-color 300ms cubic-bezier(.16,1,.3,1)}
+.win.lit{background:var(--lit);box-shadow:0 0 0 1px rgba(0,0,0,.04)}
+.ground{height:12px;margin:18px -16px 0;background:var(--line)}
+.wcap{font-size:.875rem;color:var(--muted);margin:10px 0 0}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0 0}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px}
+.kpi b{display:block;font-size:1.75rem;line-height:1.1;font-weight:600;font-variant-numeric:tabular-nums}
+.kpi span{display:block;color:var(--muted);font-size:.875rem;margin-top:4px;line-height:1.3}
+.seg{display:inline-flex;margin:22px 0 4px;border:1px solid var(--line);border-radius:10px;padding:3px;background:var(--surface)}
+.seg button{border:0;background:none;color:var(--muted);font-weight:500;padding:8px 14px;border-radius:8px;min-height:40px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.q{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin:12px 0 0}
+.q h3{margin:0 0 4px;font-size:1rem;font-weight:600;line-height:1.3}
+.q .cnt{color:var(--muted);font-size:.875rem;margin:0 0 12px}
+.bar{margin:0 0 12px}
+.bar:last-child{margin:0}
+.bar .top{display:flex;justify-content:space-between;gap:10px;font-size:.9375rem;margin-bottom:6px}
+.bar .top b{font-weight:600;font-variant-numeric:tabular-nums}
+.track{height:12px;background:var(--paper);border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+.fill{height:100%;background:var(--accent);transform-origin:left;transform:scaleX(0);transition:transform 300ms cubic-bezier(.16,1,.3,1)}
+.lead1 .fill{background:var(--accent)}
+.bar:not(.lead1) .fill{background:var(--muted)}
+.rl{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.9375rem}
+.rl span b{font-weight:600}
+.empty{color:var(--muted)}
+footer{border-top:1px solid var(--line);padding:18px 0 40px;color:var(--muted);font-size:.875rem}
+@media (max-width:520px){
+  .row2,.roles{grid-template-columns:1fr}
+  .kpis{grid-template-columns:1fr 1fr}
+  .kpi:last-child{grid-column:1/-1}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1 class="addr"><small>Гомель, ул. Сергея</small>Руденко, 11</h1>
+    <p class="lead">Опрос собственников: как будем управлять нашим домом</p>
+    <p class="note"><b>Это не бюллетень</b>, а опрос для сбора информации и создания инициативной группы. Заполняет собственник, один ответ на квартиру. ФИО и телефон видит только инициативная группа, на странице показываются только общие цифры.</p>
+    <a class="jump" href="#results">Посмотреть результаты</a>
+  </header>
+
+  <form id="f" novalidate>
+    <fieldset>
+      <legend>Квартира и собственники</legend>
+      <div class="row2">
+        <div class="field" data-f="apt">
+          <label class="lbl" for="apt">Номер квартиры</label>
+          <input id="apt" name="apt" type="text" inputmode="numeric" autocomplete="off" maxlength="3" required>
+          <div class="msg">Укажите номер квартиры цифрами</div>
+        </div>
+        <div class="field" data-f="area">
+          <label class="lbl" for="area">Площадь, м²</label>
+          <input id="area" name="area" type="text" inputmode="decimal" autocomplete="off" maxlength="6" required aria-describedby="area-h">
+          <div class="msg">Площадь от 10 до 300 м², например 67,19</div>
+        </div>
+      </div>
+      <p class="hint" id="area-h">Площадь из синего свидетельства, без балконов и лоджий.</p>
+      <div class="field" data-f="owner1">
+        <label class="lbl" for="owner1">Собственник — ФИО полностью</label>
+        <input id="owner1" name="owner1" type="text" autocomplete="name" maxlength="120" required>
+        <div class="msg">Укажите фамилию, имя и отчество</div>
+      </div>
+      <div class="field">
+        <label class="lbl" for="owner2">Второй собственник <span class="opt">— если в свидетельстве двое</span></label>
+        <input id="owner2" name="owner2" type="text" maxlength="120">
+      </div>
+      <div class="field" data-f="phone">
+        <label class="lbl" for="phone">Телефон</label>
+        <input id="phone" name="phone" type="tel" autocomplete="tel" maxlength="40" placeholder="+375 29 000-00-00" required>
+        <div class="msg">Укажите телефон, чтобы с вами могла связаться инициативная группа</div>
+      </div>
+    </fieldset>
+
+    <fieldset data-f="manage">
+      <legend><span class="num">1.</span>Способ управления общим имуществом</legend>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="manage" value="ТС" required><div><b>Товарищество собственников</b><span>ТС, в простонародье ЖСПК или кооператив</span></div></label>
+        <label class="choice"><input type="radio" name="manage" value="ЖЭУ"><div><b>ЖЭУ</b><span>Государственная форма, как сейчас</span></div></label>
+      </div>
+      <div class="msg">Выберите один вариант</div>
+    </fieldset>
+
+    <fieldset>
+      <legend><span class="num">2.</span>Вступительный взнос</legend>
+      <p class="hint">Разово при создании ТС: на регистрацию и «подушку безопасности». Ответьте, даже если выбрали ЖЭУ, — на случай, если большинство решит иначе.</p>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="entry" value="3 БВ (135 р.)"><div><b>3 базовые величины</b><span>135 руб. с квартиры</span></div></label>
+        <label class="choice"><input type="radio" name="entry" value="4 БВ (180 р.)"><div><b>4 базовые величины</b><span>180 руб. с квартиры</span></div></label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend><span class="num">3.</span>Членский взнос, в месяц с 1 м² квартиры</legend>
+      <p class="hint">Например, квартира 51 м² × 0,20 руб. = 10,20 руб. в месяц. Точный размер примем на общем собрании.</p>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="fee" value="0,20 руб."><div><b>0,20 руб. за м²</b><span data-calc="0.20">Укажите площадь — посчитаем для вашей квартиры</span></div></label>
+        <label class="choice"><input type="radio" name="fee" value="0,25 руб."><div><b>0,25 руб. за м²</b><span data-calc="0.25">Укажите площадь — посчитаем для вашей квартиры</span></div></label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend><span class="num">4.</span>Могли бы вы работать в ТС?</legend>
+      <p class="hint">Отметьте, если готовы. Председателем можно стать после аттестации.</p>
+      <div class="roles">
+        <label class="choice"><input type="checkbox" name="roles" value="Председатель"><div><b>Председатель</b></div></label>
+        <label class="choice"><input type="checkbox" name="roles" value="Главный бухгалтер"><div><b>Главный бухгалтер</b></div></label>
+        <label class="choice"><input type="checkbox" name="roles" value="Электрик"><div><b>Электрик</b></div></label>
+        <label class="choice"><input type="checkbox" name="roles" value="Сантехник"><div><b>Сантехник</b></div></label>
+        <label class="choice"><input type="checkbox" name="roles" value="Теплотехник"><div><b>Теплотехник</b></div></label>
+        <label class="choice"><input type="checkbox" name="roles" value="Уборщик"><div><b>Уборщик</b></div></label>
+      </div>
+      <div class="field" style="margin-top:12px">
+        <label class="lbl" for="roleOther">Другое <span class="opt">— если хотите помочь иначе</span></label>
+        <input id="roleOther" name="roleOther" type="text" maxlength="120">
+      </div>
+    </fieldset>
+
+    <fieldset data-f="group">
+      <legend><span class="num">5.</span>Готовы войти в инициативную группу?</legend>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="group" value="Да" required><div><b>Да</b></div></label>
+        <label class="choice"><input type="radio" name="group" value="Нет"><div><b>Нет</b></div></label>
+      </div>
+      <div class="msg">Выберите один вариант</div>
+    </fieldset>
+
+    <fieldset data-f="consent">
+      <label class="consent"><input type="checkbox" id="consent" name="consent" required>
+        <span>Даю согласие на обработку моих персональных данных, указанных выше: ФИО, адрес, номер телефона, данные о недвижимости в собственности.</span></label>
+      <div class="msg">Без согласия ответ не сохраняется</div>
+    </fieldset>
+
+    <div class="hp" aria-hidden="true"><label>Сайт <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+
+    <div class="send">
+      <div class="formerr" id="ferr" role="alert"></div>
+      <button class="btn" id="sendBtn" type="submit">Отправить ответ</button>
+    </div>
+  </form>
+
+  <section class="done" id="done" aria-live="polite">
+    <h2>Ответ сохранён</h2>
+    <p>Спасибо! Ваша квартира учтена в результатах ниже. Если ошиблись, исправьте ответ — засчитается последний.</p>
+    <button class="link" type="button" id="editBtn">Исправить ответ</button>
+  </section>
+
+  <section id="results" aria-labelledby="rh">
+    <h2 id="rh">Как отвечает дом</h2>
+    <p class="upd" id="upd">Загружаем результаты…</p>
+    <div class="facade" aria-hidden="true">
+      <div class="wins" id="wins"></div>
+      <div class="ground"></div>
+    </div>
+    <p class="wcap" id="wcap"></p>
+    <div class="kpis">
+      <div class="kpi"><b id="kFlats">—</b><span id="kFlatsL">квартир ответило</span></div>
+      <div class="kpi"><b id="kOwners">—</b><span>собственников</span></div>
+      <div class="kpi"><b id="kArea">—</b><span id="kAreaL">м² площади</span></div>
+    </div>
+    <div class="seg" role="group" aria-label="Считать проценты">
+      <button type="button" data-mode="n" aria-pressed="true">По квартирам</button>
+      <button type="button" data-mode="area" aria-pressed="false">По площади</button>
+    </div>
+    <div id="qs"></div>
+  </section>
+</div>
+<footer><div class="wrap">Опрос инициативной группы дома по ул. Сергея Руденко, 11. Результаты обновляются автоматически.</div></footer>
+
+<script>
+const CONFIG = {
+  API: '',          // ссылка на веб-приложение Apps Script (…/exec)
+  FLATS: 0,         // всего квартир в доме; 0 — пока неизвестно
+  TOTAL_AREA: 0     // общая площадь квартир, м²; 0 — пока неизвестно
+};
+const QS = [
+  { k: 'manage', t: 'Способ управления', o: [['ТС', 'Товарищество собственников'], ['ЖЭУ', 'ЖЭУ']] },
+  { k: 'entry', t: 'Вступительный взнос', o: [['3 БВ (135 р.)', '3 БВ — 135 руб.'], ['4 БВ (180 р.)', '4 БВ — 180 руб.']] },
+  { k: 'fee', t: 'Членский взнос в месяц', o: [['0,20 руб.', '0,20 руб. за м²'], ['0,25 руб.', '0,25 руб. за м²']] },
+  { k: 'group', t: 'Готовы войти в инициативную группу', o: [['Да', 'Да'], ['Нет', 'Нет']] }
+];
+const $ = s => document.querySelector(s);
+const f = $('#f');
+const num = (n, d = 0) => Number(n).toLocaleString('ru-RU', { minimumFractionDigits: d, maximumFractionDigits: d });
+const plural = (n, a, b, c) => { const m = n % 100, l = n % 10; return m > 10 && m < 20 ? c : l === 1 ? a : l > 1 && l < 5 ? b : c; };
+const store = { get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
+
+/* ---------- проверка полей: при уходе с поля, ошибка снимается сразу при исправлении ---------- */
+const areaVal = () => parseFloat(String(f.area.value).replace(',', '.'));
+const checks = {
+  apt: () => /^\d{1,3}$/.test(f.apt.value.trim()) && +f.apt.value > 0,
+  area: () => areaVal() >= 10 && areaVal() <= 300,
+  owner1: () => f.owner1.value.trim().split(/\s+/).length >= 2,
+  phone: () => f.phone.value.replace(/\D/g, '').length >= 9,
+  manage: () => !!f.manage.value,
+  group: () => !!f.group.value,
+  consent: () => f.consent.checked
+};
+const box = k => document.querySelector('[data-f="' + k + '"]');
+function mark(k) { const ok = checks[k](); box(k).classList.toggle('bad', !ok); return ok; }
+['apt', 'area', 'owner1', 'phone'].forEach(k => {
+  f[k].addEventListener('blur', () => { if (f[k].value) mark(k); });
+  f[k].addEventListener('input', () => { if (box(k).classList.contains('bad')) mark(k); });
+});
+['manage', 'group'].forEach(k => f.querySelectorAll('[name=' + k + ']').forEach(i => i.addEventListener('change', () => mark(k))));
+f.consent.addEventListener('change', () => mark('consent'));
+
+/* ---------- расчёт членского взноса для своей площади ---------- */
+function calc() {
+  const a = areaVal();
+  document.querySelectorAll('[data-calc]').forEach(s => {
+    s.innerHTML = a >= 10 && a <= 300 ? 'Для вашей квартиры: <b>' + num(a * s.dataset.calc, 2) + ' руб. в месяц</b>' : 'Укажите площадь — посчитаем для вашей квартиры';
+  });
+}
+f.area.addEventListener('input', calc);
+
+/* ---------- отправка ---------- */
+function data() {
+  return {
+    apt: f.apt.value.trim(), area: f.area.value.trim(), owner1: f.owner1.value.trim(), owner2: f.owner2.value.trim(),
+    phone: f.phone.value.trim(), manage: f.manage.value, entry: f.entry.value, fee: f.fee.value, group: f.group.value,
+    roles: [...f.querySelectorAll('[name=roles]:checked')].map(i => i.value), roleOther: f.roleOther.value.trim(),
+    consent: f.consent.checked, website: f.website.value
+  };
+}
+function fill(d) {
+  if (!d) return;
+  ['apt', 'area', 'owner1', 'owner2', 'phone', 'roleOther'].forEach(k => { if (d[k] != null) f[k].value = d[k]; });
+  ['manage', 'entry', 'fee', 'group'].forEach(k => { const i = f.querySelector('[name=' + k + '][value="' + d[k] + '"]'); if (i) i.checked = true; });
+  f.querySelectorAll('[name=roles]').forEach(i => { i.checked = (d.roles || []).includes(i.value); });
+  calc();
+}
+f.addEventListener('submit', async e => {
+  e.preventDefault();
+  const bad = Object.keys(checks).filter(k => !mark(k));
+  const err = $('#ferr');
+  if (bad.length) {
+    err.textContent = 'Проверьте отмеченные поля: ' + bad.length + ' ' + plural(bad.length, 'поле заполнено', 'поля заполнены', 'полей заполнено') + ' не полностью.';
+    err.classList.add('on');
+    const first = box(bad[0]); first.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
+    (first.querySelector('input') || first).focus({ preventScroll: true });
+    return;
+  }
+  err.classList.remove('on');
+  if (!CONFIG.API) { err.textContent = 'Сервер опроса ещё не подключён. Попробуйте позже.'; err.classList.add('on'); return; }
+  const btn = $('#sendBtn'); btn.disabled = true; btn.textContent = 'Отправляем…';
+  const d = data();
+  try {
+    const r = await fetch(CONFIG.API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(d) });
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.error || 'Не получилось сохранить ответ.');
+    const keep = Object.assign({}, d); delete keep.website; delete keep.consent;
+    store.set('opros-r11', keep);
+    f.hidden = true; $('#done').classList.add('on');
+    if (j.stats) render(j.stats);
+    $('#done').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } catch (x) {
+    err.textContent = (x && x.message && !/fetch|network|JSON/i.test(x.message)) ? x.message : 'Не получилось отправить: нет связи с сервером. Проверьте интернет и нажмите «Отправить ответ» ещё раз.';
+    err.classList.add('on');
+  } finally { btn.disabled = false; btn.textContent = 'Отправить ответ'; }
+});
+$('#editBtn').addEventListener('click', () => {
+  fill(store.get('opros-r11')); f.consent.checked = false;
+  $('#done').classList.remove('on'); f.hidden = false; f.apt.focus();
+});
+
+/* ---------- результаты ---------- */
+let LAST = null, MODE = 'n';
+document.querySelectorAll('.seg button').forEach(b => b.addEventListener('click', () => {
+  MODE = b.dataset.mode;
+  document.querySelectorAll('.seg button').forEach(x => x.setAttribute('aria-pressed', x === b));
+  if (LAST) render(LAST);
+}));
+function render(s) {
+  LAST = s;
+  const t = CONFIG.FLATS;
+  $('#kFlats').textContent = num(s.flats) + (t ? ' из ' + num(t) : '');
+  $('#kFlatsL').textContent = plural(s.flats, 'квартира ответила', 'квартиры ответили', 'квартир ответило') + (t ? ' · ' + num(s.flats / t * 100) + '%' : '');
+  $('#kOwners').textContent = num(s.owners);
+  $('#kArea').textContent = num(s.area);
+  $('#kAreaL').textContent = 'м² площади' + (CONFIG.TOTAL_AREA ? ' · ' + num(s.area / CONFIG.TOTAL_AREA * 100) + '% дома' : '');
+  const when = new Date(s.updated);
+  $('#upd').textContent = 'Обновлено в ' + when.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }) + '. Учитывается последний ответ каждой квартиры.';
+  // фасад: каждое окно — квартира; горит, если ответила
+  const total = Math.max(t || 0, s.flats);
+  const w = $('#wins');
+  if (w.children.length !== total) { w.innerHTML = ''; for (let i = 0; i < total; i++) { const d = document.createElement('div'); d.className = 'win'; w.appendChild(d); } }
+  [...w.children].forEach((d, i) => d.classList.toggle('lit', i < s.flats));
+  $('#wcap').textContent = s.flats ? 'Каждое светящееся окно — квартира, которая уже ответила.' + (t ? '' : '') : 'Пока никто не ответил — станьте первым.';
+  // вопросы
+  const qs = $('#qs'); qs.innerHTML = '';
+  QS.forEach(q => {
+    const r = s.q[q.k]; if (!r) return;
+    const base = MODE === 'n' ? r.answered : r.answeredArea;
+    const vals = q.o.map(([key, lab]) => { const o = r.opts[key] || { n: 0, area: 0 }; const v = MODE === 'n' ? o.n : o.area; return { lab, v, n: o.n, p: base ? v / base * 100 : 0 }; });
+    const max = Math.max(...vals.map(v => v.p));
+    const el = document.createElement('div'); el.className = 'q';
+    el.innerHTML = '<h3>' + q.t + '</h3><p class="cnt">' + (r.answered ? 'Ответили ' + num(r.answered) + ' ' + plural(r.answered, 'квартира', 'квартиры', 'квартир') + (MODE === 'area' ? ', ' + num(r.answeredArea) + ' м²' : '') : 'Пока нет ответов') + '</p>' +
+      vals.map(v => '<div class="bar' + (v.p === max && v.p > 0 ? ' lead1' : '') + '"><div class="top"><span>' + v.lab + '</span><b>' + num(v.p) + '%<span class="opt" style="font-weight:400"> · ' + num(v.n) + ' кв.</span></b></div><div class="track" role="img" aria-label="' + v.lab + ': ' + num(v.p) + '%"><div class="fill" data-p="' + v.p + '"></div></div></div>').join('');
+    qs.appendChild(el);
+  });
+  const rl = Object.entries(s.roles || {}).filter(([, n]) => n > 0);
+  const el = document.createElement('div'); el.className = 'q';
+  el.innerHTML = '<h3>Готовы работать в ТС</h3><p class="cnt">Сколько человек откликнулось на каждую работу</p>' + (rl.length ? '<div class="rl">' + rl.map(([k, n]) => '<span>' + k + ': <b>' + num(n) + '</b></span>').join('') + '</div>' : '<p class="empty" style="margin:0">Пока никто не отметил</p>');
+  qs.appendChild(el);
+  requestAnimationFrame(() => requestAnimationFrame(() => qs.querySelectorAll('.fill').forEach(x => x.style.transform = 'scaleX(' + (x.dataset.p / 100) + ')')));
+}
+async function load() {
+  if (!CONFIG.API) { $('#upd').textContent = 'Сервер опроса ещё не подключён.'; render({ flats: 0, owners: 0, area: 0, q: {}, roles: {}, updated: new Date().toISOString() }); return; }
+  try { const r = await fetch(CONFIG.API + '?t=' + Date.now()); render(await r.json()); }
+  catch (e) { if (!LAST) $('#upd').textContent = 'Не удалось загрузить результаты. Обновите страницу.'; }
+}
+load();
+setInterval(() => { if (!document.hidden) load(); }, 30000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) load(); });
+</script>
+</body>
+</html>
