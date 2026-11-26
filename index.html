@@ -110,7 +110,8 @@ button{font:inherit}
 .win{position:relative;aspect-ratio:3/4;border-radius:2px;background:var(--dark-win);overflow:hidden}
 .win::after{content:"";position:absolute;inset:0;background:var(--lit);opacity:0;transition:opacity 300ms var(--ease-out)}
 .win.lit::after{opacity:1}
-.shop{height:16px;margin-top:4px;border-radius:2px;background:var(--shop)}
+.shoprow{margin-top:4px}
+.shoprow i{display:block;aspect-ratio:3/4;border-radius:2px;background:repeating-linear-gradient(135deg,var(--shop) 0 3px,var(--facade) 3px 6px)}
 .ground{grid-column:1/-1;height:12px;margin:0 -12px;background:var(--line)}
 .seclabels{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:8px 0 0}
 .seclabels div{font-size:.875rem;line-height:1.4;color:var(--muted);min-width:0}
@@ -149,6 +150,7 @@ button{font:inherit}
   .notice{padding:16px}
   .house{gap:4px;padding:12px 8px 0}
   .wins{gap:2px}
+  .shoprow{margin-top:2px}
   .ground{margin:0 -8px}
   .seclabels{gap:4px}
   .srow{grid-template-columns:1fr;gap:8px}
@@ -257,8 +259,8 @@ button{font:inherit}
 <script>
 const CONFIG = {
   API: 'https://script.google.com/macros/s/AKfycbwdADTGgYseTJfEGyhwzeayKkA9cyptQs6XvXw-e6EIi2uRs3HQL-y1UwYdIbRruDKW0Q/exec',
-  // подъезды в порядке фасада: три 11-этажные секции (на 1 этаже встроенные помещения) и 14-этажная
-  FACADE: [{ n: 2, floors: 10, shop: true }, { n: 3, floors: 10, shop: true }, { n: 4, floors: 10, shop: true }, { n: 1, floors: 14, shop: false }]
+  // подъезды по порядку: 14-этажная секция и три 11-этажные (на 1 этаже встроенные помещения)
+  FACADE: [{ n: 1, floors: 14, shop: false }, { n: 2, floors: 10, shop: true }, { n: 3, floors: 10, shop: true }, { n: 4, floors: 10, shop: true }]
 };
 const MANAGE = [['ТС', 'ТС'], ['ЖЭУ', 'ЖЭУ']];
 const GROUP = [['Да', 'Да'], ['Нет', 'Нет'], ['Не определился', 'Пока не определился']];
@@ -361,7 +363,7 @@ function render(s) {
   const bySec = {}; s.sections.forEach(x => bySec[x.n] = x);
   const house = $('#house');
   if (!house.children.length) {
-    house.innerHTML = CONFIG.FACADE.map(c => '<div class="sec" data-n="' + c.n + '"><div class="wins">' + '<div class="win"></div>'.repeat(c.floors * 4) + '</div>' + (c.shop ? '<div class="shop"></div>' : '') + '</div>').join('') + '<div class="ground"></div>';
+    house.innerHTML = CONFIG.FACADE.map(c => '<div class="sec" data-n="' + c.n + '"><div class="wins">' + '<div class="win"></div>'.repeat(c.floors * 4) + '</div>' + (c.shop ? '<div class="wins shoprow">' + '<i></i>'.repeat(4) + '</div>' : '') + '</div>').join('') + '<div class="ground"></div>';
   }
   CONFIG.FACADE.forEach(c => {
     const sec = bySec[c.n], wins = [...house.querySelector('[data-n="' + c.n + '"] .wins').children];
