@@ -1,34 +1,37 @@
 /**
- * Опрос собственников дома «г. Гомель, ул. Сергея Руденко, 11» — сервер (Google Apps Script).
+ * Опросник собственников дома «г. Гомель, ул. Сергея Руденко, 11» — сервер (Google Apps Script).
  *
- * Хранит ответы в листе «Ответы» этой таблицы. Наружу (на сайт) отдаёт ТОЛЬКО
- * сводку: сколько квартир и собственников ответило и проценты по вариантам.
- * ФИО и телефоны видит только владелец таблицы.
+ * Версия без личных данных: номер квартиры, площадь, число собственников, способ управления,
+ * готовность войти в инициативную группу. ФИО и телефоны НЕ собираются.
+ * Номер квартиры нужен только чтобы засчитать один ответ на квартиру; на сайт он не отдаётся.
  *
- * Если квартира отвечает повторно — в таблицу пишется новая строка (история сохраняется),
- * а в подсчёте учитывается последний ответ этой квартиры.
- *
- * Развёртывание: Развернуть → Новое развёртывание → Веб-приложение,
- *   «Выполнять как: я», «Доступ: все». Ссылку /exec вставить в index.html (CONFIG.API).
+ * Ответы пишутся в лист «Опрос». Если квартира отвечает повторно — пишется новая строка,
+ * в подсчёте учитывается последний ответ квартиры.
+ * Наружу (doGet) отдаётся только сводка: по дому и по подъездам.
  */
-const SHEET = 'Ответы';
-const HEAD = ['Получено', 'Квартира', 'Площадь, м²', 'Собственник 1', 'Собственник 2', 'Телефон',
-  'Согласие на обработку ПД', 'Способ управления', 'Вступительный взнос', 'Членский взнос, руб/м²',
-  'Готов работать в ТС', 'Инициативная группа', 'Комментарий'];
+const SHEET = 'Опрос';
+const HEAD = ['Получено', 'Квартира', 'Подъезд', 'Площадь, м²', 'Собственников', 'Способ управления', 'Инициативная группа'];
 
+// Подъезды: диапазоны квартир (по проектной декларации: 14-этажная секция — кв. 1–56, три 11-этажные — по 40 квартир)
+const SECTIONS = [
+  { n: 1, from: 1, to: 56 },
+  { n: 2, from: 57, to: 96 },
+  { n: 3, from: 97, to: 136 },
+  { n: 4, from: 137, to: 176 },
+];
 const Q = {
   manage: ['ТС', 'ЖЭУ'],
-  entry: ['3 БВ (135 р.)', '4 БВ (180 р.)'],
-  fee: ['0,20 руб.', '0,25 руб.'],
   group: ['Да', 'Нет', 'Не определился'],
 };
-const ROLES = ['Председатель', 'Главный бухгалтер', 'Электрик', 'Сантехник', 'Теплотехник', 'Уборщик'];
+const MIN_SHOW = 5;   // разбивку по подъезду показываем, когда ответили хотя бы 5 квартир
+
+const sectionOf = apt => { const s = SECTIONS.find(s => apt >= s.from && apt <= s.to); return s ? s.n : 0; };
 
 function sheet_() {
   const ss = SpreadsheetApp.getActive();
   let s = ss.getSheetByName(SHEET);
   if (!s) {
-    s = ss.insertSheet(SHEET);
+    s = ss.insertSheet(SHEET, 0);
     s.appendRow(HEAD);
     s.setFrozenRows(1);
     s.getRange(1, 1, 1, HEAD.length).setFontWeight('bold');
@@ -38,13 +41,6 @@ function sheet_() {
 
 function out_(o) {
   return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);
-}
-
-// защита от формул в ячейках и обрезка длины
-function clean_(v, max) {
-  let s = String(v == null ? '' : v).replace(/[\u0000-\u001f]/g, ' ').trim().slice(0, max || 200);
-  if (/^[=+\-@]/.test(s)) s = "'" + s;
-  return s;
 }
 
 function doGet() {
@@ -58,17 +54,15 @@ function doPost(e) {
     const d = JSON.parse(e.postData.contents || '{}');
     if (d.website) return out_({ ok: true, stats: stats_() });            // ловушка для ботов
     const apt = parseInt(String(d.apt).replace(/\D/g, ''), 10);
-    if (!(apt >= 1 && apt <= 999)) return out_({ ok: false, error: 'Проверьте номер квартиры.' });
+    const sec = sectionOf(apt);
+    if (!sec) return out_({ ok: false, error: 'В доме квартиры с 1 по 176 — проверьте номер.' });
     const area = parseFloat(String(d.area).replace(',', '.'));
-    if (!(area >= 10 && area <= 300)) return out_({ ok: false, error: 'Проверьте площадь квартиры: от 10 до 300 м².' });
-    if (!clean_(d.owner1)) return out_({ ok: false, error: 'Укажите ФИО собственника.' });
-    if (d.consent !== true) return out_({ ok: false, error: 'Без согласия на обработку данных ответ не сохраняется.' });
-    for (const k in Q) if (d[k] && Q[k].indexOf(d[k]) < 0) return out_({ ok: false, error: 'Неизвестный вариант ответа.' });
-    const roles = (Array.isArray(d.roles) ? d.roles : []).filter(r => ROLES.indexOf(r) >= 0);
-    const other = clean_(d.roleOther, 120).replace(/;/g, ',');
-    if (other) roles.push('Другое: ' + other);
-    sheet_().appendRow([new Date(), apt, Math.round(area * 100) / 100, clean_(d.owner1, 120), clean_(d.owner2, 120),
-      clean_(d.phone, 40), 'да', d.manage || '', d.entry || '', d.fee || '', roles.join('; '), d.group || '', clean_(d.comment, 1000)]);
+    if (!(area >= 20 && area <= 120)) return out_({ ok: false, error: 'Проверьте площадь: от 20 до 120 м², например 67,19.' });
+    const owners = parseInt(d.owners, 10);
+    if (owners !== 1 && owners !== 2) return out_({ ok: false, error: 'Укажите, сколько собственников: 1 или 2.' });
+    if (Q.manage.indexOf(d.manage) < 0) return out_({ ok: false, error: 'Выберите способ управления.' });
+    if (d.group && Q.group.indexOf(d.group) < 0) return out_({ ok: false, error: 'Неизвестный вариант ответа.' });
+    sheet_().appendRow([new Date(), apt, sec, Math.round(area * 100) / 100, owners, d.manage, d.group || '']);
     return out_({ ok: true, stats: stats_() });
   } catch (err) {
     return out_({ ok: false, error: 'Не получилось сохранить ответ. Попробуйте ещё раз.' });
@@ -77,26 +71,27 @@ function doPost(e) {
   }
 }
 
-// Сводка без персональных данных: последний ответ каждой квартиры
+// Сводка без номеров квартир: последний ответ каждой квартиры
 function stats_() {
   const v = sheet_().getDataRange().getValues().slice(1);
   const last = {};
   v.forEach(r => { if (r[1]) last[r[1]] = r; });
   const rows = Object.keys(last).map(k => last[k]);
-  const res = { flats: rows.length, owners: 0, area: 0, q: {}, roles: {}, updated: new Date().toISOString() };
-  const col = { manage: 7, entry: 8, fee: 9, group: 11 };
-  for (const k in Q) { res.q[k] = { answered: 0, answeredArea: 0, opts: {} }; Q[k].forEach(o => res.q[k].opts[o] = { n: 0, area: 0 }); }
-  ROLES.concat(['Другое']).forEach(r => res.roles[r] = 0);
+  const blank = () => ({ flats: 0, owners: 0, area: 0, manage: {}, group: {} });
+  const fillOpts = o => { Q.manage.forEach(k => o.manage[k] = { n: 0, area: 0 }); Q.group.forEach(k => o.group[k] = { n: 0, area: 0 }); return o; };
+  const all = fillOpts(blank());
+  const secs = SECTIONS.map(s => Object.assign(fillOpts(blank()), { n: s.n, from: s.from, to: s.to, total: s.to - s.from + 1 }));
   rows.forEach(r => {
-    const area = Number(r[2]) || 0;
-    res.owners += (r[3] ? 1 : 0) + (r[4] ? 1 : 0);
-    res.area += area;
-    for (const k in col) {
-      const a = r[col[k]];
-      if (a && res.q[k].opts[a]) { res.q[k].opts[a].n++; res.q[k].opts[a].area += area; res.q[k].answered++; res.q[k].answeredArea += area; }
-    }
-    String(r[10] || '').split('; ').forEach(x => { if (!x) return; const key = x.indexOf('Другое') === 0 ? 'Другое' : x; if (key in res.roles) res.roles[key]++; });
+    const area = Number(r[3]) || 0, owners = Number(r[4]) || 0, sec = secs[(Number(r[2]) || sectionOf(Number(r[1]))) - 1];
+    [all, sec].forEach(t => {
+      if (!t) return;
+      t.flats++; t.owners += owners; t.area += area;
+      if (t.manage[r[5]]) { t.manage[r[5]].n++; t.manage[r[5]].area += area; }
+      if (t.group[r[6]]) { t.group[r[6]].n++; t.group[r[6]].area += area; }
+    });
   });
-  res.area = Math.round(res.area * 100) / 100;
-  return res;
+  // в подъездах с малым числом ответов распределение не раскрываем
+  secs.forEach(s => { s.area = Math.round(s.area * 100) / 100; if (s.flats < MIN_SHOW) { s.hidden = true; s.manage = null; s.group = null; } });
+  all.area = Math.round(all.area * 100) / 100;
+  return { total: 176, minShow: MIN_SHOW, all: all, sections: secs, updated: new Date().toISOString() };
 }
