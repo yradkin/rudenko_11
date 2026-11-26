@@ -161,17 +161,7 @@ button{font:inherit}
   <header>
     <p class="city">Гомель</p>
     <h1 class="addr">ул. Сергея Руденко, 11</h1>
-    <p class="lead">Опросник для собственников: как будем управлять нашим домом</p>
-    <section class="notice" aria-labelledby="nb">
-      <h2 id="nb">Это опросник, а не бюллетень</h2>
-      <p>Ответ не является голосованием и ни к чему не обязывает. Инициативная группа собирает мнения соседей: нужно ли дому товарищество собственников.</p>
-      <ul>
-        <li>Без ФИО и телефонов. Номер квартиры нужен только чтобы засчитать один ответ на квартиру — на сайте он не показывается.</li>
-        <li>Один ответ на квартиру, заполняет собственник.</li>
-        <li>Ответ можно исправить, засчитается последний.</li>
-      </ul>
-    </section>
-    <a class="jump" href="#results">Посмотреть результаты опроса</a>
+    <p class="lead">Опросник для собственников</p>
   </header>
 
   <form id="f" novalidate>
@@ -180,7 +170,8 @@ button{font:inherit}
       <div class="row2">
         <div class="field" data-f="apt">
           <label class="lbl" for="apt">Номер квартиры</label>
-          <input id="apt" name="apt" type="text" inputmode="numeric" autocomplete="off" maxlength="3" required>
+          <input id="apt" name="apt" type="text" inputmode="numeric" autocomplete="off" maxlength="3" required aria-describedby="apt-h">
+          <p class="hint fhint" id="apt-h">Только чтобы засчитать один ответ на квартиру. На сайте не показывается.</p>
           <div class="msg">В доме квартиры с 1 по 176</div>
         </div>
         <div class="field" data-f="area">
